@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azert.HttpClient", "Azert.HttpClient\Azert.HttpClient.csproj", "{4615D904-2298-4114-8681-3C515A71473E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azert.HttpClient", "src\Azert.HttpClient\Azert.HttpClient.csproj", "{4615D904-2298-4114-8681-3C515A71473E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azert.HttpClient.Windsor", "Azert.HttpClient.Windsor\Azert.HttpClient.Windsor.csproj", "{9DB67263-705A-4084-9462-4B973EDA2757}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azert.HttpClient.Windsor", "src\Azert.HttpClient.Windsor\Azert.HttpClient.Windsor.csproj", "{9DB67263-705A-4084-9462-4B973EDA2757}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
