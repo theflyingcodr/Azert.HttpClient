@@ -2,19 +2,11 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Azert.HttpClient.Clients.Interfaces;
-using Azert.HttpClient.Services.Interfaces;
 
-namespace Azert.HttpClient.Clients {
-    public class HttpAsyncClient : IHttpAsyncClient
+namespace Azert.HttpClient.Clients.Interfaces
+{
+    public interface IHttpAsyncClient
     {
-        private readonly IHttpService _httpService;
-
-        public HttpAsyncClient(IHttpService httpService) {
-            _httpService = httpService;
-
-        }
-
         /// <summary>
         /// Performs an Http GET call to the specified base address and endpoint.
         /// </summary>
@@ -25,14 +17,9 @@ namespace Azert.HttpClient.Clients {
         /// <param name="cache">Optional caching function</param>
         /// <returns>TResponse - null if not found</returns>
         /// <exception cref="HttpRequestException">Thrown if non 200 or 404 status code returned</exception>
-        public async Task<TResponse> Get<TResponse>(string baseAddress, string uri,
-                                                    IDictionary<string, string> headers,
-                                                    Func<TResponse> cache) {
-            var response =
-                await _httpService.CallHttpMethod<TResponse, object>(baseAddress, uri, null, headers, HttpMethods.GET);
-
-            return response;
-        }
+        Task<TResponse> Get<TResponse>(string baseAddress, string uri,
+                                                             IDictionary<string, string> headers,
+                                                             Func<TResponse> cache);
 
         /// <summary>
         /// Performs an Http POST call to the specified base address and endpoint with an expected result of adding a resource
@@ -45,14 +32,9 @@ namespace Azert.HttpClient.Clients {
         /// <param name="cache">Optional caching function</param>
         /// <returns>TResponse - null if not found</returns>
         /// <exception cref="HttpRequestException">Thrown if non 200 or 404 status code returned</exception>
-        public async Task<TResponse> Post<TRequest, TResponse>(string baseAddress, string uri, TRequest request,
-                                                               IDictionary<string, string> headers,
-                                                               Func<TResponse> cache) where TResponse : class {
-            var response =
-                await _httpService.CallHttpMethod<TResponse, TRequest>(baseAddress, uri, request, headers, HttpMethods.POST);
-
-            return response;
-        }
+        Task<TResponse> Post<TRequest, TResponse>(string baseAddress, string uri, TRequest request,
+                                                                        IDictionary<string, string> headers,
+                                                                        Func<TResponse> cache) where TResponse : class;
 
         /// <summary>
         /// Performs an Http PUT call to the specified base address and endpoint with an expected result of updating the resource
@@ -65,14 +47,9 @@ namespace Azert.HttpClient.Clients {
         /// <param name="cache">Optional caching function</param>
         /// <returns>TResponse - null if not found</returns>
         /// <exception cref="HttpRequestException">Thrown if non 200 or 404 status code returned</exception>
-        public async Task<TResponse> Put<TRequest, TResponse>(string baseAddress, string uri, TRequest request,
-                                                               IDictionary<string, string> headers,
-                                                               Func<TResponse> cache) where TResponse : class {
-            var response =
-                await _httpService.CallHttpMethod<TResponse, TRequest>(baseAddress, uri, request, headers, HttpMethods.PUT);
-
-            return response;
-        }
+        Task<TResponse> Put<TRequest, TResponse>(string baseAddress, string uri, TRequest request,
+                                                                       IDictionary<string, string> headers,
+                                                                       Func<TResponse> cache) where TResponse : class;
 
         /// <summary>
         /// Performs an Http DELETE call to the specified base address and endpoint with a result of removing a resource
@@ -84,14 +61,8 @@ namespace Azert.HttpClient.Clients {
         /// <param name="cache">Optional caching function</param>
         /// <returns>TResponse - null if not found</returns>
         /// <exception cref="HttpRequestException">Thrown if non 200 or 404 status code returned</exception>
-        public async Task<TResponse> Delete<TResponse>(string baseAddress, string uri,
-                                                    IDictionary<string, string> headers,
-                                                    Func<TResponse> cache) {
-            var response =
-                await _httpService.CallHttpMethod<TResponse, object>(baseAddress, uri, null, headers, HttpMethods.DELETE);
-
-            return response;
-        }
-
+        Task<TResponse> Delete<TResponse>(string baseAddress, string uri,
+                                                                IDictionary<string, string> headers,
+                                                                Func<TResponse> cache);
     }
 }

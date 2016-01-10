@@ -5,10 +5,12 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Azert.HttpClient.Services.Interfaces;
 using Newtonsoft.Json;
 
 namespace Azert.HttpClient.Services {
-    public class HttpService {
+    public class HttpService : IHttpService
+    {
         public async Task<TResponse> CallHttpMethod<TResponse, TRequest>(string baseAddress, string uri, TRequest request,
                                                                          IDictionary<string, string> headers,
                                                                          HttpMethods method) {
