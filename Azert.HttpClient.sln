@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azert.HttpClient", "src\Aze
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azert.HttpClient.Windsor", "src\Azert.HttpClient.Windsor\Azert.HttpClient.Windsor.csproj", "{9DB67263-705A-4084-9462-4B973EDA2757}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8AA8E584-7E11-4E81-9C55-A6EC56071947}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azert.HttpClient.Tests", "tests\Azert.HttpClient.Tests\Azert.HttpClient.Tests.csproj", "{09D59B9D-86CE-4759-BBD1-CB0CFCCFBA60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +25,15 @@ Global
 		{9DB67263-705A-4084-9462-4B973EDA2757}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DB67263-705A-4084-9462-4B973EDA2757}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DB67263-705A-4084-9462-4B973EDA2757}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09D59B9D-86CE-4759-BBD1-CB0CFCCFBA60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09D59B9D-86CE-4759-BBD1-CB0CFCCFBA60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09D59B9D-86CE-4759-BBD1-CB0CFCCFBA60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09D59B9D-86CE-4759-BBD1-CB0CFCCFBA60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{09D59B9D-86CE-4759-BBD1-CB0CFCCFBA60} = {8AA8E584-7E11-4E81-9C55-A6EC56071947}
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Azert.HttpClient.Clients.Interfaces;
 using Azert.HttpClient.Services.Interfaces;
