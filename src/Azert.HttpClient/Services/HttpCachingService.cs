@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Azert.HttpClient.Services.Interfaces;
 using Newtonsoft.Json;
 
@@ -19,13 +20,11 @@ namespace Azert.HttpClient.Services
         /// <param name="uri">Uri for endpoint - part of cache key</param>
         /// <param name="cacheCheck">Optional - Func to locate cached object</param>
         /// <returns>TResponse, null if not found</returns>
-        public TResponse CheckCache<TRequest, TResponse>(TRequest request, string baseUri, string uri,
-                                                         Func<string, TResponse> cacheCheck = null)
+        public async Task<TResponse> CheckCache<TRequest, TResponse>(TRequest request, string baseUri, string uri,
+                                                         Func<string, Task<TResponse>> cacheCheck = null)
             where TResponse : class
         {
-            var cacheKey = $"{JsonConvert.SerializeObject(request)}{baseUri}{uri}";
-
-            var cached = cacheCheck?.Invoke(CreateCacheKey(baseUri, uri, request));
+            var cached = cacheCheck == null ? null : await cacheCheck.Invoke(CreateCacheKey(baseUri, uri, request));
 
             return cached;
         }
@@ -41,10 +40,11 @@ namespace Azert.HttpClient.Services
         /// <param name="baseUri">Base uri to endpoint - part of cache key</param>
         /// <param name="uri">Uri for endpoint - part of cache key</param>
         /// <param name="setCache">Optional - Func to add cached object</param>
-        public void AddToCache<TResponse, TRequest>(TResponse response, TRequest request, string baseUri, string uri,
-                                                    Action<TResponse, string> setCache = null)
+        public async Task AddToCache<TResponse, TRequest>(TResponse response, TRequest request, string baseUri, string uri,
+                                                    Func<TResponse, string, Task> setCache = null)
         {
-            setCache?.Invoke(response, CreateCacheKey(baseUri, uri, response));
+            if(setCache != null)
+                await setCache(response, CreateCacheKey(baseUri, uri, response));
         }
 
         /// <summary>
@@ -55,10 +55,11 @@ namespace Azert.HttpClient.Services
         /// <param name="baseUri">Base uri to endpoint - part of cache key</param>
         /// <param name="uri">Uri for endpoint - part of cache key</param>
         /// <param name="voidCache">Optional - Func to void cached object</param>
-        public void VoidCache(string baseUri, string uri,
-                                                 Action<string> voidCache = null)
+        public async Task VoidCache(string baseUri, string uri,
+                                                 Func<string, Task> voidCache = null)
         {
-            voidCache?.Invoke(CreateCacheKey<object>(baseUri, uri, null));
+            if(voidCache != null)
+                await voidCache(CreateCacheKey<object>(baseUri, uri, null));
         }
 
         /// <summary>

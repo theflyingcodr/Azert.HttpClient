@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Azert.HttpClient.Services.Interfaces
 {
@@ -17,8 +18,8 @@ namespace Azert.HttpClient.Services.Interfaces
         /// <param name="uri">Uri for endpoint - part of cache key</param>
         /// <param name="cacheCheck">Optional - Func to locate cached object</param>
         /// <returns>TResponse, null if not found</returns>
-        TResponse CheckCache<TRequest, TResponse>(TRequest request, string baseUri, string uri,
-                                                                  Func<string, TResponse> cacheCheck = null)
+        Task<TResponse> CheckCache<TRequest, TResponse>(TRequest request, string baseUri, string uri,
+                                                                              Func<string, Task<TResponse>> cacheCheck = null)
             where TResponse : class;
 
         /// <summary>
@@ -32,8 +33,8 @@ namespace Azert.HttpClient.Services.Interfaces
         /// <param name="baseUri">Base uri to endpoint - part of cache key</param>
         /// <param name="uri">Uri for endpoint - part of cache key</param>
         /// <param name="setCache">Optional - Func to add cached object</param>
-        void AddToCache<TResponse, TRequest>(TResponse response, TRequest request, string baseUri, string uri,
-                                                             Action<TResponse, string> setCache = null);
+        Task AddToCache<TResponse, TRequest>(TResponse response, TRequest request, string baseUri, string uri,
+                                                                   Func<TResponse, string, Task> setCache = null);
 
         /// <summary>
         /// Voids an item stored in cache
@@ -43,8 +44,8 @@ namespace Azert.HttpClient.Services.Interfaces
         /// <param name="baseUri">Base uri to endpoint - part of cache key</param>
         /// <param name="uri">Uri for endpoint - part of cache key</param>
         /// <param name="voidCache">Optional - Func to void cached object</param>
-        void VoidCache(string baseUri, string uri,
-                                 Action<string> voidCache = null);
+        Task VoidCache(string baseUri, string uri,
+                                             Func<string, Task> voidCache = null);
 
         /// <summary>
         /// Creates a cache key based on the composite key

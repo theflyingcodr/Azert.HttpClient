@@ -27,20 +27,23 @@ namespace Azert.HttpClient.Clients
         /// <param name="baseAddress">Base address to api service being called</param>
         /// <param name="uri">Endpoint</param>
         /// <param name="headers">Headers to add to request</param>
-        /// <param name="cacheCheck">Optional - function to check cache</param>
+        /// <param name="cacheCheck">Optional - async function to check cache</param>
+        /// <param name="setCache">Optional - async function to add an item to cache</param>
         /// <returns>TResponse - null if not found</returns>
         /// <exception cref="HttpRequestException">Thrown if non 200 or 404 status code returned</exception>
         public async Task<TResponse> Get<TResponse>(string baseAddress, string uri,
                                                     IDictionary<string, string> headers,
-                                                    Func<string, TResponse> cacheCheck = null, Action<TResponse, string> setCache = null) where TResponse : class
+                                                    Func<string, Task<TResponse>> cacheCheck = null, Func<TResponse, string, Task> setCache = null) where TResponse : class
         {
-            var cache = _httpCachingService.CheckCache<object, TResponse>(null, baseAddress, uri, cacheCheck);
+            var cache = await _httpCachingService.CheckCache<object, TResponse>(null, baseAddress, uri, cacheCheck);
 
             if(cache != null)
                 return cache;
 
             var response =
                 await _httpService.CallHttpMethod<TResponse, object>(baseAddress, uri, null, headers, HttpMethods.GET);
+
+            await _httpCachingService.AddToCache<TResponse, object>(response, null, baseAddress, uri, setCache);
 
             return response;
         }
@@ -60,10 +63,10 @@ namespace Azert.HttpClient.Clients
         /// <exception cref="HttpRequestException">Thrown if non 200 or 404 status code returned</exception>
         public async Task<TResponse> Post<TRequest, TResponse>(string baseAddress, string uri, TRequest request,
                                                                IDictionary<string, string> headers,
-                                                               Func<string, TResponse> cacheCheck = null,
-                                                               Action<TResponse, string> setCache = null) where TResponse : class
+                                                               Func<string, Task<TResponse>> cacheCheck = null,
+                                                               Func<TResponse, string, Task> setCache = null) where TResponse : class
         {
-            var cache = _httpCachingService.CheckCache<object, TResponse>(null, baseAddress, uri, cacheCheck);
+            var cache = await _httpCachingService.CheckCache(request, baseAddress, uri, cacheCheck);
 
             if(cache != null)
                 return cache;
@@ -71,7 +74,7 @@ namespace Azert.HttpClient.Clients
             var response =
                 await _httpService.CallHttpMethod<TResponse, TRequest>(baseAddress, uri, request, headers, HttpMethods.POST);
 
-            _httpCachingService.AddToCache(response, request, baseAddress, uri, setCache);
+            await _httpCachingService.AddToCache(response, request, baseAddress, uri, setCache);
 
             return response;
         }
@@ -91,10 +94,10 @@ namespace Azert.HttpClient.Clients
         /// <exception cref="HttpRequestException">Thrown if non 200 or 404 status code returned</exception>
         public async Task<TResponse> Put<TRequest, TResponse>(string baseAddress, string uri, TRequest request,
                                                                IDictionary<string, string> headers,
-                                                               Func<string, TResponse> cacheCheck = null,
-                                                               Action<TResponse, string> setCache = null) where TResponse : class
+                                                               Func<string, Task<TResponse>> cacheCheck = null,
+                                                               Func<TResponse, string, Task> setCache = null) where TResponse : class
         {
-            var cache = _httpCachingService.CheckCache<object, TResponse>(null, baseAddress, uri, cacheCheck);
+            var cache = await _httpCachingService.CheckCache(request, baseAddress, uri, cacheCheck);
 
             if(cache != null)
                 return cache;
@@ -102,7 +105,7 @@ namespace Azert.HttpClient.Clients
             var response =
                 await _httpService.CallHttpMethod<TResponse, TRequest>(baseAddress, uri, request, headers, HttpMethods.PUT);
 
-            _httpCachingService.AddToCache(response, request, baseAddress, uri, setCache);
+            await _httpCachingService.AddToCache(response, request, baseAddress, uri, setCache);
 
             return response;
         }
@@ -110,20 +113,19 @@ namespace Azert.HttpClient.Clients
         /// <summary>
         /// Performs an Http DELETE call to the specified base address and endpoint with a result of removing a resource
         /// </summary>
-        /// <typeparam name="TResponse">Expected response type to return</typeparam>
         /// <param name="baseAddress">Base address to api service being called</param>
         /// <param name="uri">Endpoint</param>
         /// <param name="headers">Headers to add to request</param>
         /// <param name="voidCache">Optional function to void the item from cache</param>
         /// <returns>TResponse - null if not found</returns>
         /// <exception cref="HttpRequestException">Thrown if non 200 or 404 status code returned</exception>
-        public async Task Delete<TResponse>(string baseAddress, string uri,
+        public async Task Delete(string baseAddress, string uri,
                                                     IDictionary<string, string> headers,
-                                                    Action<string> voidCache = null)
+                                                    Func<string, Task> voidCache = null)
         {
-            await _httpService.CallHttpMethod<TResponse, object>(baseAddress, uri, null, headers, HttpMethods.DELETE);
+            await _httpService.CallHttpMethod<object, object>(baseAddress, uri, null, headers, HttpMethods.DELETE);
 
-            _httpCachingService.VoidCache(baseAddress, uri, voidCache);
+            await _httpCachingService.VoidCache(baseAddress, uri, voidCache);
         }
 
     }
