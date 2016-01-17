@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Azert.HttpClient.Clients.Interfaces;
 using Azert.HttpClient.Services.Interfaces;
@@ -35,7 +34,7 @@ namespace Azert.HttpClient.Clients
                                                     IDictionary<string, string> headers,
                                                     Func<string, Task<TResponse>> cacheCheck = null, Func<TResponse, string, Task> setCache = null) where TResponse : class
         {
-            var cache = await _httpCachingService.CheckCache<object, TResponse>(null, baseAddress, uri, cacheCheck);
+            var cache = await _httpCachingService.CheckCache(baseAddress, uri, null, cacheCheck);
 
             if(cache != null)
                 return cache;
@@ -43,7 +42,7 @@ namespace Azert.HttpClient.Clients
             var response =
                 await _httpService.CallHttpMethod<TResponse, object>(baseAddress, uri, null, headers, HttpMethods.GET);
 
-            await _httpCachingService.AddToCache<TResponse, object>(response, null, baseAddress, uri, setCache);
+            await _httpCachingService.AddToCache(response, baseAddress, uri, null, setCache);
 
             return response;
         }
@@ -66,7 +65,7 @@ namespace Azert.HttpClient.Clients
                                                                Func<string, Task<TResponse>> cacheCheck = null,
                                                                Func<TResponse, string, Task> setCache = null) where TResponse : class
         {
-            var cache = await _httpCachingService.CheckCache(request, baseAddress, uri, cacheCheck);
+            var cache = await _httpCachingService.CheckCache(baseAddress, uri, headers, cacheCheck);
 
             if(cache != null)
                 return cache;
@@ -74,7 +73,7 @@ namespace Azert.HttpClient.Clients
             var response =
                 await _httpService.CallHttpMethod<TResponse, TRequest>(baseAddress, uri, request, headers, HttpMethods.POST);
 
-            await _httpCachingService.AddToCache(response, request, baseAddress, uri, setCache);
+            await _httpCachingService.AddToCache(response, baseAddress, uri, headers, setCache);
 
             return response;
         }
@@ -97,7 +96,7 @@ namespace Azert.HttpClient.Clients
                                                                Func<string, Task<TResponse>> cacheCheck = null,
                                                                Func<TResponse, string, Task> setCache = null) where TResponse : class
         {
-            var cache = await _httpCachingService.CheckCache(request, baseAddress, uri, cacheCheck);
+            var cache = await _httpCachingService.CheckCache(baseAddress, uri, headers, cacheCheck);
 
             if(cache != null)
                 return cache;
@@ -105,7 +104,7 @@ namespace Azert.HttpClient.Clients
             var response =
                 await _httpService.CallHttpMethod<TResponse, TRequest>(baseAddress, uri, request, headers, HttpMethods.PUT);
 
-            await _httpCachingService.AddToCache(response, request, baseAddress, uri, setCache);
+            await _httpCachingService.AddToCache(response, baseAddress, uri, headers, setCache);
 
             return response;
         }

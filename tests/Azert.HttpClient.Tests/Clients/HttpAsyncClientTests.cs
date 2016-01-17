@@ -52,7 +52,7 @@ namespace Azert.HttpClient.Tests.Clients
 
             var responseObj = _fixture.Create<RandomObject>();
 
-            _httpCachingService.Setup(x => x.CheckCache<object, RandomObject>(null, _baseAddress, _uri, null))
+            _httpCachingService.Setup(x => x.CheckCache<RandomObject>(_baseAddress, _uri, null, null))
                                .Returns(Task.FromResult((RandomObject)null));
 
             _httpService.Setup(
@@ -77,7 +77,7 @@ namespace Azert.HttpClient.Tests.Clients
 
             var responseObj = _fixture.Create<RandomObject>();
 
-            _httpCachingService.Setup(x => x.CheckCache<object, RandomObject>(null, _baseAddress, _uri, null))
+            _httpCachingService.Setup(x => x.CheckCache<RandomObject>(_baseAddress, _uri, null, null))
                                .Returns(Task.FromResult((RandomObject)null));
 
             _httpService.Setup(
@@ -91,7 +91,7 @@ namespace Azert.HttpClient.Tests.Clients
             // assert
             _httpCachingService.Verify(
                                        x =>
-                                       x.AddToCache<RandomObject, object>(It.IsAny<RandomObject>(), null, _baseAddress, _uri,
+                                       x.AddToCache<RandomObject>(It.IsAny<RandomObject>(), _baseAddress, _uri, null,
                                                     It.IsAny<Func<RandomObject, string, Task>>()), Times.Once);
 
         }
@@ -104,7 +104,7 @@ namespace Azert.HttpClient.Tests.Clients
 
             _httpCachingService.Setup(
                                       x =>
-                                      x.CheckCache<object, RandomObject>(null, _baseAddress, _uri, CheckCache))
+                                      x.CheckCache<RandomObject>(_baseAddress, _uri, null, CheckCache))
                                .Returns(Task.FromResult(responseObj));
 
             // act
@@ -125,7 +125,7 @@ namespace Azert.HttpClient.Tests.Clients
             var responseObj = _fixture.Create<RandomObject>();
             var requestObj = _fixture.Create<RandomObject>();
 
-            _httpCachingService.Setup(x => x.CheckCache<RandomObject, RandomObject>(requestObj, _baseAddress, _uri, null))
+            _httpCachingService.Setup(x => x.CheckCache<RandomObject>(_baseAddress, _uri, _headers, null))
                                .Returns(Task.FromResult((RandomObject)null));
 
             _httpService.Setup(
@@ -149,7 +149,7 @@ namespace Azert.HttpClient.Tests.Clients
             var requestObj = _fixture.Create<RandomObject>();
             _cachedObject = null;
 
-            _httpCachingService.Setup(x => x.CheckCache(requestObj, _baseAddress, _uri, CheckCache))
+            _httpCachingService.Setup(x => x.CheckCache(_baseAddress, _uri, _headers, CheckCache))
                                .Returns(Task.FromResult((RandomObject)null));
 
             _httpService.Setup(
@@ -163,8 +163,8 @@ namespace Azert.HttpClient.Tests.Clients
             // assert
             _httpCachingService.Verify(
                                        x =>
-                                       x.AddToCache(It.IsAny<RandomObject>(), It.IsAny<RandomObject>(), _baseAddress,
-                                                   _uri, null), Times.Once);
+                                       x.AddToCache(It.IsAny<RandomObject>(), _baseAddress,
+                                                   _uri, _headers, null), Times.Once);
 
         }
 
@@ -179,8 +179,7 @@ namespace Azert.HttpClient.Tests.Clients
 
             _httpCachingService.Setup(
                                       x =>
-                                      x.CheckCache<object, RandomObject>(It.IsAny<RandomObject>(), _baseAddress,
-                                                                               _uri, It.IsAny<Func<string, Task<RandomObject>>>()))
+                                      x.CheckCache(_baseAddress, _uri, _headers, It.IsAny<Func<string, Task<RandomObject>>>()))
                                .Returns(Task.FromResult(_cachedObject));
 
             // act
@@ -201,7 +200,7 @@ namespace Azert.HttpClient.Tests.Clients
             var responseObj = _fixture.Create<RandomObject>();
             var requestObj = _fixture.Create<RandomObject>();
 
-            _httpCachingService.Setup(x => x.CheckCache<RandomObject, RandomObject>(requestObj, _baseAddress, _uri, null))
+            _httpCachingService.Setup(x => x.CheckCache<RandomObject>(_baseAddress, _uri, _headers, null))
                                .Returns(Task.FromResult((RandomObject)null));
 
             _httpService.Setup(
@@ -225,7 +224,7 @@ namespace Azert.HttpClient.Tests.Clients
             var requestObj = _fixture.Create<RandomObject>();
             _cachedObject = null;
 
-            _httpCachingService.Setup(x => x.CheckCache(requestObj, _baseAddress, _uri, CheckCache))
+            _httpCachingService.Setup(x => x.CheckCache(_baseAddress, _uri, _headers, CheckCache))
                                .Returns(Task.FromResult((RandomObject)null));
 
 
@@ -240,8 +239,8 @@ namespace Azert.HttpClient.Tests.Clients
             // assert
             _httpCachingService.Verify(
                                        x =>
-                                       x.AddToCache(It.IsAny<RandomObject>(), It.IsAny<RandomObject>(), _baseAddress,
-                                                   _uri, null), Times.Once);
+                                       x.AddToCache(It.IsAny<RandomObject>(), _baseAddress,
+                                                   _uri, _headers, null), Times.Once);
 
         }
 
@@ -256,8 +255,7 @@ namespace Azert.HttpClient.Tests.Clients
 
             _httpCachingService.Setup(
                                       x =>
-                                      x.CheckCache<object, RandomObject>(It.IsAny<RandomObject>(), _baseAddress,
-                                                                               _uri, It.IsAny<Func<string, Task<RandomObject>>>()))
+                                      x.CheckCache(_baseAddress, _uri, _headers, It.IsAny<Func<string, Task<RandomObject>>>()))
                                .Returns(Task.FromResult(_cachedObject));
 
             // act
