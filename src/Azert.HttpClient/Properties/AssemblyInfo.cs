@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Azert.HttpClient")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("An async httpclient with optional caching")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Azert Software")]
 [assembly: AssemblyProduct("Azert.HttpClient")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
