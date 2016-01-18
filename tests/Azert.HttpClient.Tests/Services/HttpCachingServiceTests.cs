@@ -192,14 +192,24 @@ namespace Azert.HttpClient.Tests.Services
 
         #region VoidCache
 
+        [Test]
         public async void VoidCache_should_remove_item()
         {
             // arrange
+            var obj = _fixture.Create<RandomObject>();
+            _cache.Clear();
+            _cache.Count.Should().Be(0);
+            var identifier = _fixture.Create<string>();
+            var header = new Dictionary<string, string>
+                         {
+                             {headerKey, identifier}
+                         };
 
             // act
-            await _sut.VoidCache(_baseAddress, _uri);
+            await _sut.VoidCache(_baseAddress, _uri, VoidCache);
 
             // assert
+            _cache.Count.Should().Be(0);
         }
 
         #endregion
@@ -214,6 +224,11 @@ namespace Azert.HttpClient.Tests.Services
         private async Task SetCache(RandomObject obj, string key)
         {
             _cache.Add(key, obj);
+        }
+
+        private async Task VoidCache(string key)
+        {
+            _cache.Remove(key);
         }
 
     }
